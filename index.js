@@ -28,25 +28,26 @@ app.use(bodyParser.json());
 // Use cors middleware to allow requests from all origins
 app.use(cors());
 
-async function embedRetrivalQuery(queryText) {
-  const result = await model.embedContent({
-    content: { parts: [{ text: queryText }] },
-    taskType: TaskType.RETRIEVAL_QUERY,
-  });
-  const embedding = result.embedding;
-  return embedding.values;
+async function embedRetrivalDocuments(docTexts) {
+    const batchSize = 100; // API limit is 100 requests per batch
+    const embeddings = [];
+
+    for (let i = 0; i < docTexts.length; i += batchSize) {
+        const batch = docTexts.slice(i, i + batchSize);
+
+        const result = await model.batchEmbedContents({
+            requests: batch.map((t) => ({
+                content: { parts: [{ text: t }] },
+                taskType: TaskType.RETRIEVAL_DOCUMENT,
+            })),
+        });
+
+        embeddings.push(...result.embeddings.map((e, i) => ({ text: batch[i], values: e.values })));
+    }
+
+    return embeddings;
 }
 
-async function embedRetrivalDocuments(docTexts) {
-  const result = await model.batchEmbedContents({
-    requests: docTexts.map((t) => ({
-      content: { parts: [{ text: t }] },
-      taskType: TaskType.RETRIEVAL_DOCUMENT,
-    })),
-  });
-  const embeddings = result.embeddings;
-  return embeddings.map((e, i) => ({ text: docTexts[i], values: e.values }));
-}
 
 // Returns Euclidean Distance between 2 vectors
 function euclideanDistance(a, b) {
