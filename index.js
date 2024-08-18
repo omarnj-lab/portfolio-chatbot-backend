@@ -22,24 +22,30 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-async function embedRetrivalDocuments(docTexts) {
-    const batchSize = 100; // API limit is 100 requests per batch
-    const embeddings = [];
+// Embed retrieval query function
+async function embedRetrivalQuery(queryText) {
+    const result = await model.embedContent({
+        content: { parts: [{ text: queryText }] },
+        taskType: TaskType.RETRIEVAL_QUERY,
+    });
+    const embedding = result.embedding;
+    return embedding.values;
+}
 
-    for (let i = 0; i < docTexts.length; i += batchSize) {
-        const batch = docTexts.slice(i, i + batchSize);
+// Perform query function
+async function performQuery(queryText, docs) {
+    const queryValues = await embedRetrivalQuery(queryText);
 
-        const result = await model.batchEmbedContents({
-            requests: batch.map((t) => ({
-                content: { parts: [{ text: t }] },
-                taskType: TaskType.RETRIEVAL_DOCUMENT,
-            })),
-        });
+    // Calculate distances
+    const distances = docs.map((doc) => ({
+        distance: euclideanDistance(doc.values, queryValues),
+        text: doc.text,
+    }));
 
-        embeddings.push(...result.embeddings.map((e, i) => ({ text: batch[i], values: e.values })));
-    }
+    // Sort by distance
+    const sortedDocs = distances.sort((a, b) => a.distance - b.distance);
 
-    return embeddings;
+    return sortedDocs.map(doc => doc.text);
 }
 
 
