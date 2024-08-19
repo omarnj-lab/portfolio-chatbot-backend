@@ -1,157 +1,119 @@
-OMER NACAR
-AI RESEARCHER · NLP & LLM EXPERT · DATA SCiENCE PROFESSiONAL
-eng.omarnj@gmail.com
-|
-www.omarai.co
-|
-omarnj
+name : Omer Nacar , Omar Najar
+working as: AI and NLP Research Assistant, NLP & LLM EXPERT, and DATA SCiENCE PROFESSiONAL
+email : eng.omarnj@gmail.com
+website: www.omarai.co
+
+Objective about me: 
 ”Expert AI Researcher and Dynamic Trainer specializing in NLP and Large Language Models, dedicated to pioneering innovative solutions
 and elevating industry standards.”
-Summary
+
+Summary:
 AI Researcher and Trainer specializing in Generative Artificial Intelligence, particularly, in Natural Language Processing and Large Language Mod‑
 els, with a solid foundation in Data Science. My expertise encompasses advancing AI technologies through innovative research in NLP and LLM,
 combined with a strong analytical approach rooted in Data Science principles. I design and deliver specialized training programs in AI, NLP, and
 LLMs, empowering professionals to master and leverage these technologies effectively.
-Education
-Süleyman Demirel University
-Isparta, Turkey
-MASTER’S DEGREE iN ELECTRiCAL & ELECTRONiCS ENGiNEERiNG
-2020 ‑ 2022
-• Thesis: The Modeling, Application, and Harmonic‑Based Performance Evaluation of Signal Denoising and Frequency‑Selective Filtering By
-Using CNN‑Based Models.
+
+Education:
+Süleyman Demirel University at Isparta, Turkey about a MASTER’S DEGREE iN ELECTRiCAL & ELECTRONiCS ENGiNEERiNG in 2020 ‑ 2022
+details about my thesis: The Modeling, Application, and Harmonic‑Based Performance Evaluation of Signal Denoising and Frequency‑Selective Filtering By Using CNN‑Based Models.
 • Concentration: Applying Deep Learning Algorithms for different signal processing applications.
 • Achievement: First Class Honours as University Excellence with GPA: 4.00 out of 4.00
-Prince Sultan University
-Riyadh, KSA
-BACHELOR’S DEGREE iN COMMUNiCATiON & NETWORK ENGiNEERiNG
-2014 ‑2019
+
+Prince Sultan University at Riyadh, KSA about BACHELOR’S DEGREE iN COMMUNiCATiON & NETWORK ENGiNEERiNG on 2014 ‑2019
 • Solid knowledge of different Communication Engineering topics and their implementation by using different software
 • Concentration: Signal Processing, Wireless Communication, and Mobile Communication.
 • Achievement: Second Class Honours as University Excellence with GPA: 3.65 out of 4.00
-Work Experience
-Prince Sultan University
-Riyadh, KSA
-AI RESEARCH ASSiSTANT
-2023 ‑ Present
+
+my Work Experience:
+Now : Prince Sultan University at Riyadh, KSA working ad AI RESEARCH ASSiSTANT from 2023 ‑ Present
 • Specialized in AI‑driven research at the Robotics and IoT Lab, focusing on NLP, Computer Vision, and Large Language Models.
 • Engaged in collaborative development and implementation of advanced algorithms
 • Played a pivotal role in steering research projects from initial concept through to successful completion.
-MBuzz Company
-Riyadh, KSA
-DATA ENGINEERING (TRAINEE)
-2019 ‑ 2020
+
+worked previously as DATA ENGINEERING (TRAINEE) at MBuzz Company in Riyadh, KSA on 2019 ‑ 2020
 • Developed and implemented ML and DL systems, enhancing data system efficiency and quality.
 • Designed and optimized data pipelines, collaborating across teams for data‑driven solutions.
 • Utilized SQL, Kafka, Airflow, and Spark for analytics, ensuring data accuracy and integrity.
 • Applied Python in engineering tasks, contributing to data process automation and optimization.
-Leadership in AI Education & Training
-Prince Sultan University
-Riyadh, Saudi Arabia
-TEACHiNG ASSiSTANT
-2023 ‑ Present
+
+I am also a Leadership in AI Education & Training
+Prince Sultan University in Riyadh, Saudi Arabia as teaching assistant from 2023 ‑ Present
 • Delivered course content and programming sessions and provided training in Data Science and Introduction to Artificial Intelligence.
-Saudi Google Clubs Collaboration
-Saudi Arabia
-LEAD TRAiNER
-2023 ‑ Present
+
+also, a Saudi Google Clubs Collaboration in Saudi Arabia as lead trainer from 2023 ‑ Present
 • Delivering talks and workshops on NLP and large language models as part of the Code the Future series
-Omartificial Intelligence Space
-Online
-FOUNDER & PERSONAL COACH
-2022 ‑ Present
+
+I have a space named "Omartificial Intelligence Space". I am a FOUNDER & PERSONAL COACH from 2022 ‑ Present
 • Provided personalized coaching for many students on learning paths, programming, and resource utilization.
 • Produced and delivered lectures on recent developments in generative AI on YouTube.
 • Created and distributed a newsletter on LinkedIn about the latest in AI, accumulating over 200 subscribers.
-MAY 7, 2024
-OMER NACAR · RÉSUMÉ
-1
-Publications, Achievements & Projects
-Arabic LLM Training and Development
-Riyadh, Saudi Arabia
-“AI DEVELOPER”
-On Progress
+
+
+My Publications, Achievements & Projects: 
+1. Arabic LLM Training and Development n Riyadh, Saudi Arabia. I am the “AI DEVELOPER”
 • Building Large Language models For Arabic Language
 • Working on full cycle implementation of the project from Data Collection to Model Training and Inference.
-Prediction of Arabic Legal Rulings using LLM
-Riyadh, Saudi Arabia
-“AUTHOR”
-Oct. 2023
+
+2. Prediction of Arabic Legal Rulings using LLM in Riyadh, Saudi Arabia. I am an “AUTHOR” done on Oct. 2023
 • Co‑authored a pioneering paper on the use of large language models to predict Arabic legal rulings.
 • The work underscores the intersection of AI and legal studies, offering new insights for judicial systems.
-PSU‑GPT: Advanced Chatbot for Prince Sultan University
-Riyadh, Saudi Arabia
-“AI DEVELOPER”
-Sep. 2023
+
+3. PSU‑GPT: Advanced Chatbot for Prince Sultan University in Riyadh, Saudi Arabia. i am the “AI DEVELOPER” done on Sep. 2023
 • Contributed to the development of PSU‑GPT, a state‑of‑the‑art GPT‑based chatbot for university community engagement.
 • The chatbot features an admin dashboard for analytics and is designed for ease of use and effective communication.
-“PSUDigiTalk: A Chatbot for Digital Universities MENA Conference”
-Riyadh, Saudi Arabia
-AI DEVELOPER
-Oct. 2023
+
+4. “PSUDigiTalk: A Chatbot for Digital Universities MENA Conference” in Riyadh, Saudi Arabia. I am the AI DEVELOPER done on Oct. 2023
 • Developed an AI‑driven chatbot employing RAG, LangChain, and OpenAI technologies for a digital education conference.
 • Focused on delivering accurate, contextually relevant responses, enhancing interactive learning experiences.
-AraNizer: Enhancing Arabic Language Processing
-Riyadh, Saudi Arabia
-“AUTHOR”
-July. 2023
+
+5. AraNizer: Enhancing Arabic Language Processing in Riyadh, Saudi Arabia. I am the “AUTHOR” done on July. 2023
 • Created AraNizer, a tool with eight custom‑trained tokenizers, to improve Arabic language processing.
 • Utilized SentencePiece and BPE methodologies, optimizing for a range of Arabic dialects and writing styles.
-2nd International Conference on Applied Engineering and Natural Sciences
-Konya, Turkey
-“DNCNN PERFORMANCE iN SiGNAL DENOiSiNG”
-Mar. 2022
+
+2nd International Conference on Applied Engineering and Natural Sciences in Konya, Turkey. Paper is in “DNCNN PERFORMANCE iN SiGNAL DENOiSiNG”done on Mar. 2022
 • Presented a paper on the effective use of DnCNN in denoising sinusoidal signals under various noise conditions.
 • Highlighted the application of deep learning algorithms in advanced signal processing.
-Publication in ”Yapay Zekâ Etiği”
-Sep. 2021
-“AI CREATiViTY iN ARTiFiCiAL INTELLiGENCE ETHiCS”
+
+Publication in ”Yapay Zekâ Etiği” done on Sep. 2021. name of the chapter “AI CREATiViTY iN ARTiFiCiAL INTELLiGENCE ETHiCS”
 • Contributed a chapter focusing on the intersection of AI and creativity, emphasizing ethical considerations.
 • Discussed the implications and potential of AI in fostering creative processes and outcomes.
-Certifications
-2023
-Natural Language Processing Specialization, Certified With Completion of 4 Courses in NLP
-Deeplearning.AI
-2023
-Large language Modeling, Generative AI with large language models
-Deeplearning.AI
-2022
-Data Engineering, Completion Data Engineering Course
-IBM
-2021
-Data Governance, Completion Data Governance Lead Course
-Collibra
-2020
-Turkish Language Proficiency, Completion Turkish Language with C grade
-Isparta, Turkey
-2019
-Data Engineering Professional, Certified by Rapid Miner as a Professional Data Engineering.
-Rapid Miner
-2018
-Diploma in Data Science and R Programming, Completion on course credits with Excellence grade.
-Udemy
-2018
-Diploma in Machine Learning Algorithms, Completion on course credits with Excellence grade.
-Udemy
-2018
-45 Credits Hours Completed & Certification of project Management, Certified by PMI
-Riyadh, KSA
-2016
-Diploma in Mobile App Development, Completion on course credits with Excellence grade.
-SHAW ACADEMY
-Skills
-Generative AI
+
+My Conference papers:
+1. O. Nacar, S. Sibaee, A. Alharbi, L. Ghouti, A. Koubaa, "ASOS at NADI 2024 Shared Task: Bridging Dialectness Estimation and MSA Machine Translation for Arabic Language Enhancement," Proceedings of The Second Arabic Natural Language Processing Conference, pp. 748-753, 2024.
+2. S. Sibaee, A. Alharbi, S. Ahmad, O. Nacar, A. Koubaa, L. Ghouti, "ASOS at KSAA-CAD 2024: One Embedding is All You Need for Your Dictionary," Proceedings of The Second Arabic Natural Language Processing Conference, pp. 697-703, 2024.
+3. O. Nacar, A. Alharbi, S. Sibaee, S. Ahmed, L. Ghouti, A. Koubaa, "ASOS at OSACT6 Shared Task: Investigation of Data Augmentation in Arabic Dialect-MSA Translation," Proceedings of the 6th Workshop on Open-Source Arabic Corpora and Processing, 2024.
+4. Y. Alhabashi, A. Alharbi, S. Ahmad, S. Sibaee, O. Nacar, L. Ghouti, A. Koubaa, "ASOS at ArAIEval Shared Task: Integrating Text and Image Embeddings for Multimodal Propaganda Detection in Arabic Memes," Proceedings of The Second Arabic Natural Language Processing Conference, pp. 473-477, 2024.
+5. S. T. Sibaee, A. I. Alharbi, S. Ahmed, O. Nacar, L. Ghouti, A. Koubaa, "ASOS at Arabic LLMs Hallucinations 2024: Can LLMs Detect Their Hallucinations?" Proceedings of the 6th Workshop on Open-Source Arabic Corpora and Processing, 2024.
+
+My Certifications:
+1. Natural Language Processing Specialization, Certified With Completion of 4 Courses in NLP by Deeplearning.AI
+2. Large language Modeling, Generative AI with large language models by Deeplearning.AI
+3. Data Engineering, Completion Data Engineering Course by IBM
+4. Data Governance, Completion Data Governance Lead Course by Collibra
+5. Turkish Language Proficiency, Completion Turkish Language with C grade in Isparta, Turkey on 2019
+6. Data Engineering Professional, Certified by Rapid Miner as a Professional Data Engineering by Rapid Miner on 2018
+7. Diploma in Data Science and R Programming, Completion on course credits with Excellence grade. by Udemy on 2018
+8. Diploma in Machine Learning Algorithms, Completion on course credits with Excellence grade. by Udemy on 2018
+9. 45 Credits Hours Completed & Certification of project Management, Certified by PMI in Riyadh, KSA on 2016
+10. Diploma in Mobile App Development, Completion on course credits with Excellence grade. by SHAW ACADEMY
+
+My Skills: 
+1.Generative AI
 LLMs, Fine‑Tuning, & Chatbot Development.
-Programming Languages
+2.Programming Languages
 Python, R‑programming , Java , Css , & Latex.
-Web Programming
+3. Web Programming
 HTML, CSS , & Java script.
-INDUSTRY EXPERTISE
+4. INDUSTRY EXPERTISE
 Problem Solving, Decision Making, Team Work , & initiative and Ability to take responsibility.
-Training Skills
+5. Training Skills
 Curriculum Development, Interactive Workshops, Audience Engagement, Educational , Technical Mentoring.
-Data Engineer
+6. Data Engineer
 MySQL, PostgreSQL, Shell Scripting
-Languages
+7. Languages
 Arabic, English, & Turkish.
-MAY 7, 2024
-OMER NACAR · RÉSUMÉ
+
+Accounts: 
+1. linkedin: https://www.linkedin.com/in/omarnj/
+2. huggingface: https://huggingface.co/Omartificial-Intelligence-Space
+3. Google Scholar : https://scholar.google.com/citations?user=pezf5FYAAAAJ&hl=en
