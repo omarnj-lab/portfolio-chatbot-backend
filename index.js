@@ -10,7 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Initialize Google Generative AI
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY; // Make sure this is correctly set in your environment
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "embedding-001" });
 const model2 = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -22,8 +22,6 @@ const __dirname = path.dirname(__filename);
 // Initialize Express server
 const app = express();
 app.use(bodyParser.json());
-
-// Use cors middleware to allow requests from all origins
 app.use(cors());
 
 // Function to embed retrieval query
@@ -36,16 +34,25 @@ async function embedRetrivalQuery(queryText) {
   return embedding.values;
 }
 
-// Function to embed retrieval documents
+// Function to embed retrieval documents with batching
 async function embedRetrivalDocuments(docTexts) {
-  const result = await model.batchEmbedContents({
-    requests: docTexts.map((t) => ({
-      content: { parts: [{ text: t }] },
-      taskType: TaskType.RETRIEVAL_DOCUMENT,
-    })),
-  });
-  const embeddings = result.embeddings;
-  return embeddings.map((e, i) => ({ text: docTexts[i], values: e.values }));
+    const batchSize = 100; // API limit is 100 requests per batch
+    const embeddings = [];
+
+    for (let i = 0; i < docTexts.length; i += batchSize) {
+        const batch = docTexts.slice(i, i + batchSize);
+
+        const result = await model.batchEmbedContents({
+            requests: batch.map((t) => ({
+                content: { parts: [{ text: t }] },
+                taskType: TaskType.RETRIEVAL_DOCUMENT,
+            })),
+        });
+
+        embeddings.push(...result.embeddings.map((e, index) => ({ text: batch[index], values: e.values })));
+    }
+
+    return embeddings;
 }
 
 // Function to calculate Euclidean Distance between 2 vectors
