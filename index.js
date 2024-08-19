@@ -22,6 +22,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// Function Definitions
+
 // Embed retrieval query function
 async function embedRetrivalQuery(queryText) {
     const result = await model.embedContent({
@@ -47,7 +49,6 @@ async function performQuery(queryText, docs) {
 
     return sortedDocs.map(doc => doc.text);
 }
-
 
 // Returns Euclidean Distance between 2 vectors
 function euclideanDistance(a, b) {
@@ -109,7 +110,6 @@ app.get('/', (req, res) => {
 // POST /ask endpoint
 app.post('/ask', async (req, res) => {
     const { question } = req.body;
-    console.log("Received question:", question);
     if (!question) {
         return res.status(400).json({ error: 'Question is required' });
     }
