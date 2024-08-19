@@ -13,7 +13,12 @@ import { fileURLToPath } from 'url';
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "embedding-001" });
-const model2 = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+const model2 = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  systemInstruction: "You are a knowledgeable and professional assistant. Your role is to provide clear, concise, and accurate answers to questions that are typically asked during a resume review. When responding, consider the context provided from the resume and tailor your answers to highlight relevant skills, experiences, and achievements. Ensure that your responses are professional, informative, and presented as if you are representing the candidate in a professional setting.",
+});
+
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
