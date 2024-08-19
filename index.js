@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+import cors from 'cors'; // Import cors middleware
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -9,48 +9,46 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
-
+// Initialize Google Generative AI
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY; // Make sure this is correctly set in your environment
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "embedding-001" });
 const model2 = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+// Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Initialize Express server
 const app = express();
 app.use(bodyParser.json());
+
+// Use cors middleware to allow requests from all origins
 app.use(cors());
 
-// Function Definitions
-
-// Embed retrieval query function
+// Function to embed retrieval query
 async function embedRetrivalQuery(queryText) {
-    const result = await model.embedContent({
-        content: { parts: [{ text: queryText }] },
-        taskType: TaskType.RETRIEVAL_QUERY,
-    });
-    const embedding = result.embedding;
-    return embedding.values;
+  const result = await model.embedContent({
+    content: { parts: [{ text: queryText }] },
+    taskType: TaskType.RETRIEVAL_QUERY,
+  });
+  const embedding = result.embedding;
+  return embedding.values;
 }
 
-// Perform query function
-async function performQuery(queryText, docs) {
-    const queryValues = await embedRetrivalQuery(queryText);
-
-    // Calculate distances
-    const distances = docs.map((doc) => ({
-        distance: euclideanDistance(doc.values, queryValues),
-        text: doc.text,
-    }));
-
-    // Sort by distance
-    const sortedDocs = distances.sort((a, b) => a.distance - b.distance);
-
-    return sortedDocs.map(doc => doc.text);
+// Function to embed retrieval documents
+async function embedRetrivalDocuments(docTexts) {
+  const result = await model.batchEmbedContents({
+    requests: docTexts.map((t) => ({
+      content: { parts: [{ text: t }] },
+      taskType: TaskType.RETRIEVAL_DOCUMENT,
+    })),
+  });
+  const embeddings = result.embeddings;
+  return embeddings.map((e, i) => ({ text: docTexts[i], values: e.values }));
 }
 
-// Returns Euclidean Distance between 2 vectors
+// Function to calculate Euclidean Distance between 2 vectors
 function euclideanDistance(a, b) {
   let sum = 0;
   for (let n = 0; n < a.length; n++) {
@@ -59,7 +57,7 @@ function euclideanDistance(a, b) {
   return Math.sqrt(sum);
 }
 
-// Performs a relevance search for queryText in relation to a known list of embeddings
+// Function to perform a relevance search for queryText in relation to a known list of embeddings
 async function performQuery(queryText, docs) {
   const queryValues = await embedRetrivalQuery(queryText);
 
@@ -75,10 +73,10 @@ async function performQuery(queryText, docs) {
   return sortedDocs.map(doc => doc.text);
 }
 
-// Generates a final answer using all the relevant documents
+// Function to generate a final answer using all the relevant documents
 async function generateFinalAnswer(queryText, docs) {
   const context = docs.join("\n\n");
-  const result = await model2.generateContent(`Question: ${queryText}\n\nContext:\n${context}\n\nAnswer:`)
+  const result = await model2.generateContent(`Question: ${queryText}\n\nContext:\n${context}\n\nAnswer:`);
   const response = await result.response;
   const text = await response.text();
 
@@ -102,29 +100,29 @@ embedRetrivalDocuments(docTexts).then((precomputedDocs) => {
   docs = precomputedDocs;
 });
 
-// Define a route for the root URL
-app.get('/', (req, res) => {
-    res.send('Welcome to the Portfolio Chatbot Backend!');
-});
-
-// POST /ask endpoint
+// Define the POST endpoint
 app.post('/ask', async (req, res) => {
-    const { question } = req.body;
-    if (!question) {
-        return res.status(400).json({ error: 'Question is required' });
-    }
+  const { question } = req.body;
+  console.log("Received question:", question);
+  if (!question) {
+    return res.status(400).json({ error: 'Question is required' });
+  }
 
-    try {
-        const sortedDocs = await performQuery(question, docs);
-        const finalAnswer = await generateFinalAnswer(question, sortedDocs);
-        res.json({ answer: finalAnswer });
-    } catch (error) {
-        console.error("Error processing request:", error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+  try {
+    // Use retrieval query embeddings to find most relevant documents
+    const sortedDocs = await performQuery(question, docs);
+
+    // Generate a final answer using all the relevant documents
+    const finalAnswer = await generateFinalAnswer(question, sortedDocs);
+    res.json({ answer: finalAnswer });
+  } catch (error) {
+    console.error("Error processing request:", error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
+// Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
