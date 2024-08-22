@@ -1,8 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors'; // Import cors middleware
+import cors from 'cors';
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
-import { TextLoader } from "langchain/document_loaders/fs/text";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { TaskType } from "@google/generative-ai";
 import { readFileSync } from 'fs';
@@ -12,13 +11,12 @@ import { fileURLToPath } from 'url';
 // Initialize Google Generative AI
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
-const model = genAI.getGenerativeModel({ model: "embedding-001" });
 
+const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
 const model2 = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
-  systemInstruction: "You are a knowledgeable and professional assistant. Your role is to provide clear, concise, and accurate answers to questions that are typically asked during a resume review. When responding, consider the context provided from the resume and tailor your answers to highlight relevant skills, experiences, and achievements. Ensure that your responses are professional, informative, and presented as if you are representing the candidate in a professional setting.",
+  systemInstruction: "You are Omar's CV Chatbot assistant that retrieves information about my CV. Your Answer should be precise and attractive. Always answer from the context and do not improvise. Provide answers in bullets and in an organized way",
 });
-
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -29,58 +27,63 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// Utility function for cosine similarity
+function cosineSimilarity(a, b) {
+  let dotProduct = 0.0;
+  let aMagnitude = 0.0;
+  let bMagnitude = 0.0;
+  for (let i = 0; i < a.length; i++) {
+    dotProduct += a[i] * b[i];
+    aMagnitude += a[i] * a[i];
+    bMagnitude += b[i] * b[i];
+  }
+  aMagnitude = Math.sqrt(aMagnitude);
+  bMagnitude = Math.sqrt(bMagnitude);
+  return dotProduct / (aMagnitude * bMagnitude);
+}
+
 // Function to embed retrieval query
 async function embedRetrivalQuery(queryText) {
   const result = await model.embedContent({
     content: { parts: [{ text: queryText }] },
     taskType: TaskType.RETRIEVAL_QUERY,
   });
-  const embedding = result.embedding;
-  return embedding.values;
+  return result.embedding.values;
 }
 
 // Function to embed retrieval documents with batching
 async function embedRetrivalDocuments(docTexts) {
-    const batchSize = 100; // API limit is 100 requests per batch
-    const embeddings = [];
+  const batchSize = 100; // API limit is 100 requests per batch
+  const embeddings = [];
 
-    for (let i = 0; i < docTexts.length; i += batchSize) {
-        const batch = docTexts.slice(i, i + batchSize);
+  for (let i = 0; i < docTexts.length; i += batchSize) {
+    const batch = docTexts.slice(i, i + batchSize);
 
-        const result = await model.batchEmbedContents({
-            requests: batch.map((t) => ({
-                content: { parts: [{ text: t }] },
-                taskType: TaskType.RETRIEVAL_DOCUMENT,
-            })),
-        });
+    const result = await model.batchEmbedContents({
+      requests: batch.map((t) => ({
+        content: { parts: [{ text: t }] },
+        taskType: TaskType.RETRIEVAL_DOCUMENT,
+      })),
+    });
 
-        embeddings.push(...result.embeddings.map((e, index) => ({ text: batch[index], values: e.values })));
-    }
-
-    return embeddings;
-}
-
-// Function to calculate Euclidean Distance between 2 vectors
-function euclideanDistance(a, b) {
-  let sum = 0;
-  for (let n = 0; n < a.length; n++) {
-    sum += Math.pow(a[n] - b[n], 2);
+    embeddings.push(...result.embeddings.map((e, index) => ({ text: batch[index], values: e.values })));
   }
-  return Math.sqrt(sum);
+
+  return embeddings;
 }
 
 // Function to perform a relevance search for queryText in relation to a known list of embeddings
 async function performQuery(queryText, docs) {
   const queryValues = await embedRetrivalQuery(queryText);
 
-  // Calculate distances
-  const distances = docs.map((doc) => ({
-    distance: euclideanDistance(doc.values, queryValues),
+  // Calculate similarities using cosine similarity
+  const similarities = docs.map((doc) => ({
+    similarity: cosineSimilarity(doc.values, queryValues),
     text: doc.text,
   }));
 
-  // Sort by distance
-  const sortedDocs = distances.sort((a, b) => a.distance - b.distance);
+  // Sort by similarity (descending)
+  const sortedDocs = similarities.sort((a, b) => b.similarity - a.similarity);
 
   return sortedDocs.map(doc => doc.text);
 }
@@ -92,7 +95,7 @@ async function generateFinalAnswer(queryText, docs) {
   const response = await result.response;
   const text = await response.text();
 
-  // Remove ** and \n from the final answer
+  // Clean up the final answer
   const cleanedText = text.replace(/\*\*/g, '').replace(/\n/g, ' ');
   return cleanedText;
 }
@@ -106,10 +109,12 @@ const loadEmbeddingsTxt = () => {
 };
 const docTexts = loadEmbeddingsTxt();
 
-// Precompute embeddings for our documents
+// Precompute embeddings for our documents and store in FAISS
 let docs = [];
+const faissStore = new FaissStore();
 embedRetrivalDocuments(docTexts).then((precomputedDocs) => {
   docs = precomputedDocs;
+  faissStore.addDocuments(precomputedDocs);
 });
 
 // Define the POST endpoint
@@ -121,11 +126,12 @@ app.post('/ask', async (req, res) => {
   }
 
   try {
-    // Use retrieval query embeddings to find most relevant documents
-    const sortedDocs = await performQuery(question, docs);
+    // Use retrieval query embeddings to find most relevant documents via FAISS
+    const queryValues = await embedRetrivalQuery(question);
+    const results = faissStore.search(queryValues, { topK: 10 });
 
     // Generate a final answer using all the relevant documents
-    const finalAnswer = await generateFinalAnswer(question, sortedDocs);
+    const finalAnswer = await generateFinalAnswer(question, results.map(r => r.text));
     res.json({ answer: finalAnswer });
   } catch (error) {
     console.error("Error processing request:", error);
