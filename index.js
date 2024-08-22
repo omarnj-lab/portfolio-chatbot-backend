@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { FaissStore } from "@langchain/community/vectorstores/faiss";
+import faiss from 'faiss'; // Make sure faiss is installed or use appropriate import
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { TaskType } from "@google/generative-ai";
 import { readFileSync } from 'fs';
@@ -72,20 +72,36 @@ async function embedRetrivalDocuments(docTexts) {
   return embeddings;
 }
 
+// Initialize FAISS Index
+async function initializeFaissIndex(embeddings) {
+  const dimension = embeddings[0].values.length; // Assuming all embeddings have the same dimension
+  const index = new faiss.IndexFlatL2(dimension); // Using L2 distance
+
+  // Add all embeddings to the index
+  embeddings.forEach((embedding) => {
+    index.add(faiss.floatArray(embedding.values));
+  });
+
+  return index;
+}
+
 // Function to perform a relevance search for queryText in relation to a known list of embeddings
-async function performQuery(queryText, docs) {
+async function performQuery(queryText, docs, index) {
   const queryValues = await embedRetrivalQuery(queryText);
 
-  // Calculate similarities using cosine similarity
-  const similarities = docs.map((doc) => ({
-    similarity: cosineSimilarity(doc.values, queryValues),
-    text: doc.text,
-  }));
+  // Perform search using FAISS
+  const k = 10; // Number of nearest neighbors to retrieve
+  const distances = new Float32Array(k);
+  const labels = new Int32Array(k);
+  index.search(faiss.floatArray(queryValues), k, distances, labels);
 
-  // Sort by similarity (descending)
-  const sortedDocs = similarities.sort((a, b) => b.similarity - a.similarity);
+  // Retrieve the corresponding documents
+  const sortedDocs = [];
+  for (let i = 0; i < k; i++) {
+    sortedDocs.push(docs[labels[i]].text);
+  }
 
-  return sortedDocs.map(doc => doc.text);
+  return sortedDocs;
 }
 
 // Function to generate a final answer using all the relevant documents
@@ -111,10 +127,10 @@ const docTexts = loadEmbeddingsTxt();
 
 // Precompute embeddings for our documents and store in FAISS
 let docs = [];
-const faissStore = new FaissStore();
-embedRetrivalDocuments(docTexts).then((precomputedDocs) => {
+let faissIndex;
+embedRetrivalDocuments(docTexts).then(async (precomputedDocs) => {
   docs = precomputedDocs;
-  faissStore.addDocuments(precomputedDocs);
+  faissIndex = await initializeFaissIndex(precomputedDocs);
 });
 
 // Define the POST endpoint
@@ -127,11 +143,10 @@ app.post('/ask', async (req, res) => {
 
   try {
     // Use retrieval query embeddings to find most relevant documents via FAISS
-    const queryValues = await embedRetrivalQuery(question);
-    const results = faissStore.search(queryValues, { topK: 10 });
+    const sortedDocs = await performQuery(question, docs, faissIndex);
 
     // Generate a final answer using all the relevant documents
-    const finalAnswer = await generateFinalAnswer(question, results.map(r => r.text));
+    const finalAnswer = await generateFinalAnswer(question, sortedDocs);
     res.json({ answer: finalAnswer });
   } catch (error) {
     console.error("Error processing request:", error);
